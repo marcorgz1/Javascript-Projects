@@ -1,50 +1,91 @@
 @import url('https://cdn.jsdelivr.net/fontsource/fonts/onest:vf@latest/latin-wght-normal.woff2');
 
+:root {
+    background: #222;
+    font-size: 62.5%;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
     color: #fff;
-    background: #222;
     font-family: 'Onest', sans-serif;
 }
 
+h1, h2, h3, h4 {
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 5.4rem;
+    color: rgb(225, 0, 255);
+    margin-bottom: 5rem;
+}
+
+h1 > span {
+    font-size: 2.4rem;
+    font-weight: 500;
+}
+
+h2 {
+    font-size: 4.2rem;
+    margin-bottom: 4rem;
+    font-weight: 700;
+}
+  
+h3 {
+    font-size: 2.8rem;
+    font-weight: 500;
+}
+
 main {
-    width: 80%;
-    margin: 200px auto;
-    & h1 {
-        text-align: center;
-        font-size: 48px;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 20px;
 }
 
 main > * {
     width: 100%;
 }
 
-.home-buttons {
+.flex-column {
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
-    gap: 15px;
+}
+  
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+  
+.justify-center {
+    justify-content: center;
+}
 
-    & a {
-        margin: auto;
-        color: rgb(196, 0, 255);
-        background: #f7f7f7;
-        font-size: 1.2rem;
-        font-weight: 500;        
-        width: 15rem;
-        text-align: center;
-        text-decoration: none;
-        padding: 8px;
+.text-center {
+    text-align: center;
+}
 
-        &:hover {
-            box-shadow: 2px 2px 5px 1px rgb(252, 0, 255);
-            transition: all .3s ease;
-        }
-    }
+.hidden {
+    display: none;
+}
+
+main h1 {
+    font-size: 48px;
+}
+
+#home a {
+    color: rgb(225, 0, 255);
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 1rem 0;
+    width: 20rem;
+    text-align: center;
+    border: 1px solid rgb(225, 0, 255);
+    margin-bottom: 1rem;
+    background: #fff;
 }

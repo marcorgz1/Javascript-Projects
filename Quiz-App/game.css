@@ -1,59 +1,52 @@
-@import url('https://cdn.jsdelivr.net/fontsource/fonts/onest:vf@latest/latin-wght-normal.woff2');
-
-body {
-    color: #fff;
-    font-family: 'Onest', sans-serif;
-    background: #222;
-}
-
 .choice-container {
     display: flex;
-    justify-content: center;
     width: 100%;
-}
-
-.choice-letter {
-    padding: 10px 20px;
-    font-size: 2rem;
-    background: rgb(252, 0, 255);
-}
-
-.choice-text {   
-    width: 80%;         
+    font-size: 1.8rem;
+    border: 1px solid rgba(86, 165, 235, 0.25);
     background: #fff;
-    border: 1px solid rgb(252, 0, 255);
 
     &:hover {
-        box-shadow: 2px 2px 7px 1px rgb(252, 0, 255);
+        cursor: pointer;
+        box-shadow: 2px 2px 7px 1px rgba(86, 165, 235, 0.5);
+        transform: translateY(-0.1rem);
+        transition: transform 150ms;
     }
 }
 
-/* HUD */
+.choice-letter {
+    padding: 1.5rem 2.5rem;
+    background: rgb(255, 0, 255);    
+}
+
+.choice-text {
+    padding: 1.5rem;
+    width: 100%;
+}
 
 #hud {
     display: flex;
     justify-content: space-between;
 }
 
-.hud-prefix {
+.hud-text {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 .hud-score {
     text-align: center;
 }
 
-.progressBar {
-    width: 15rem;
-    height: 2rem;
-    border-radius: 8px;
-    border: 2px solid rgb(252, 0, 255);
-    margin-top: 1rem;
+#progressBar {
+    width: 20rem;
+    height: 4rem;
+    border: 1px solid rgb(255, 0, 255);
+    border-radius: 0.3rem;
+    margin-top: 1.5rem;
 }
 
-.progressBarFull {
-    height: 3.4rem;
-    background: rgb(253, 160, 254);
-    width: 0%;
+#progressBarFull {
+    height: 1.3rem;
+    background: rgb(255, 78, 255);
+    width: 0;
 }
