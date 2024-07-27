@@ -43,7 +43,10 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
     height: 100vh;
+    max-width: 80rem;
+    margin: 0 auto;
     gap: 20px;
 }
 
@@ -88,4 +91,8 @@ main h1 {
     border: 1px solid rgb(225, 0, 255);
     margin-bottom: 1rem;
     background: #fff;
+
+    &:hover {
+        box-shadow: 2px 2px 7px 1px rgb(225, 0, 255);
+    }
 }

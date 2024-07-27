@@ -1,5 +1,7 @@
 .choice-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     font-size: 1.8rem;
     border: 1px solid rgba(86, 165, 235, 0.25);
@@ -7,7 +9,7 @@
 
     &:hover {
         cursor: pointer;
-        box-shadow: 2px 2px 7px 1px rgba(86, 165, 235, 0.5);
+        box-shadow: 2px 2px 7px 1px rgb(255, 0, 255);
         transform: translateY(-0.1rem);
         transition: transform 150ms;
     }
@@ -35,6 +37,7 @@
 
 .hud-score {
     text-align: center;
+    font-size: 8rem;
 }
 
 #progressBar {
