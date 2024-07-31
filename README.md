@@ -9,3 +9,7 @@
 - Arkanoid Game
 
 ![Arkanoid Game](image-1.png)
+
+- Modern Calculator
+
+![Modern Calculator Screenshot](image-2.png)
