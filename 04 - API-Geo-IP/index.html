@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Geo IP</title>   
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+>
+</head>
+<body>
+    <main>
+        <form id="form">
+            <label for="user-ip" style="font-weight: 700;">IP del usuario:
+                <input id="input" placeholder="Introduce aquí la IP">
+                <small>Por ejemplo: 54.85.132.205</small>
+            </label>
+            <button type="submit" id="submit">Buscar</button>
+        </form>
+
+        <div>
+            <!-- Mostrar datos de la IP preformateados como código -->
+            <pre id="results"></pre>
+        </div>
+    </main>
+
+    <script>
+        const OPTIONS = {
+	        method: 'GET',
+	        headers: {
+	        	'x-rapidapi-key': 'beed1e3308msh9211a6d6a628100p1f791ejsn15d9016f9ce9',
+	        	'x-rapidapi-host': 'ip-directory.p.rapidapi.com'
+	        }
+        };
+
+        // Crear fetching de datos 
+        const fetchIPInfo = ip => {
+            // Hacer fetching de datos a la API de las IPs (se le pasa la IP de la que se 
+            // quiere obtener la info y las opciones de la API para poder obtener los 
+            // datos correctamente)
+            return fetch(`https://freeipapi.com/api/json/${ip}`, OPTIONS)
+                // Resolver la promesa que devuelve el fetch y convertirla a JSON
+                .then(res => res.json())
+                // Si existe algún error, mostrarlo por consola
+                .catch(error => console.error(error))
+        }
+
+        // Obtener el formulario del DOM
+        const $form = document.querySelector('#form')
+        // Obtener el elemento input del DOM
+        const $input = document.querySelector('#input')
+        // Obtener el botón de submit del DOM
+        const $button = document.querySelector('#submit')
+        // Obtener el elemento pre que contiene los resultados del DOM
+        const $results = document.querySelector('#results')
+        
+        // Cuando el formulario del DOM escuche el evento "submit", se ejecutará un evento
+        $form.addEventListener('submit', async (event) => {
+            // Se pone el "preventDefault" para eliminar el comportamiento por defecto que utiliza el 
+            //submit (por defecto, realiza una petición POST, cosa que no queremos que haga)
+            event.preventDefault()
+            // Obtener el valor que ingresa el usuario en el input
+            const { value } = $input
+            // Si no hay ningún valor en el input, no hacer nada
+            if (!value) return
+
+            // Obtener el valor del input del fetching de datos
+            const IPInfo = await fetchIPInfo(value)
+
+            // Evitar que el usuario haga más peticiones cuando el formulario esté cargando
+
+            // Deshabilitar el botón de submit
+            $button.setAttribute('disabled', '')
+            // Estilar el cargando del formulario con el atributo "aria-busy"
+            // Inicializarlo como true para que se pueda mostrar la animación
+            $button.setAttribute('aria-busy', 'true')
+            // Si existe la info de la IP que ha buscado el usuario
+            if (IPInfo) {
+                // Convertir los datos que se han obtenido de la API en un string
+                // Al "JSON.stringify" se le pasan 3 parámetros: el valor (en este caso, el IPInfo ya que queremos convertirlo a un string), el replacer (en este 
+                // caso no hay así que es null) y los espacios (en este caso, 2)
+                $results.innerHTML = JSON.stringify(IPInfo, null, 2)
+            }
+
+            // Una vez se ha realizado el fetching de los datos, el usuario podrá volver a buscar,
+            // por lo que eliminaremos los atributos anteriores
+            $button.removeAttribute('disabled')
+            $button.removeAttribute('aria-busy')
+
+        })
+    </script>
+</body>
+</html>
