@@ -3,17 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./assets/typing-icon.png" type="image/x-icon">
     <title>Typing Game</title>
     <style>
       :root {
         color-scheme: light dark;
         --dark: #222;
-        --yellow: #daaf38;
+        --gray: #9d9d9d;
+        --yellow: #e2b714;
+      }
+      *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
       body {
         background: var(--dark);
-        font-family: "Menlo", monospace;
+        font-family: Menlo, monospace;
         display: grid;
         place-content: center;
         height: 100vh;
@@ -21,33 +28,66 @@
         font-size: 24px;
       }
 
-      section {
+      #game {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
-        max-width: 500px;
-        padding: 16px;
+        flex-direction: column;        
+        max-width: 600px;        
       }
 
       time {
         color: var(--yellow);
       }
 
-      /* input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            opacity: 0;
-            z-index: -99;
-        } */
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none; /* Evitar que se pueda hacer click sobre el input */
+        /* opacity: 0; */
+        z-index: -99;
+      }
+
+      p {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      n-letter {
+        position: relative;
+        color: var(--gray);
+        /* Mostrar cursor de texto antes de la primera letra */
+        &.active::before {
+          content: '|';
+          color: var(--yellow);
+          font-size: 22px;
+          /* Mostrar el cursor de texto por encima de la primera letra */
+          position: absolute;
+          left: -55%;
+          animation: 1s expand infinite ease-in-out;
+        }
+      }
+
+      @keyframes expand {
+        /* Cuando la animación abarque entre el 0 y el 50% */
+        0%, 25% {
+          /* Ir incrementando la escala del cursor partiendo desde 0 */
+          scale: 0;
+        }
+        /* Cuando la animación se haya completado */
+        100% {
+          /* Mostrar el cursor completamente */
+          scale: 100%;
+        }
+      }
     </style>
   </head>
   <body>
     <main>
-      <section>
+      <section id="game">
         <time></time>
         <p></p>
+        <!-- Permitir que se haga focus en el elemento input nada más se cargue la página -->
         <input autofocus />
       </section>
       <!-- <section id="results">
