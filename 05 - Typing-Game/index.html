@@ -11,6 +11,8 @@
         --dark: #222;
         --gray: #9d9d9d;
         --yellow: #e2b714;
+        --green: #14ba00;
+        --red: #ff0000;
       }
       *, *::before, *::after {
         margin: 0;
@@ -53,6 +55,16 @@
         gap: 12px;
       }
 
+      n-word {
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.3s ease-in-out;
+        /* Si la palabra está marcada, es decir, le faltan letras por escribir,
+        cambiar el color del borde pordefecto de la palabra a rojo */
+        &.marked {
+          border-color: var(--red);
+        }
+      }
+
       n-letter {
         position: relative;
         color: var(--gray);
@@ -63,21 +75,34 @@
           font-size: 22px;
           /* Mostrar el cursor de texto por encima de la primera letra */
           position: absolute;
-          left: -55%;
-          animation: 1s expand infinite ease-in-out;
+          left: -50%;
+          animation: 1s blink infinite ease-in-out;
+        }
+        /* Cuando la letra tenga las clases "active" y "last", mostrar el cursor a 
+        la derecha de la letra */
+        &.active.last::before {
+          left: 65%;
+        }
+        /* Cuando la letra escrita por el usuario y la actual coincidan, pintarla de verde */
+        &.correct {
+          color: var(--green);
+        }
+        /* Cuando la letra escrita por el usuario y la actual no coincidan, pintarla de rojo */
+        &.incorrect {
+          color: #ff0000;
         }
       }
 
-      @keyframes expand {
-        /* Cuando la animación abarque entre el 0 y el 50% */
+      @keyframes blink {
+        /* Cuando la animación abarque entre el 0 y el 25% */
         0%, 25% {
-          /* Ir incrementando la escala del cursor partiendo desde 0 */
-          scale: 0;
+          /* Mostrar el cursor compeltamente */
+          opacity: 1;
         }
-        /* Cuando la animación se haya completado */
-        100% {
-          /* Mostrar el cursor completamente */
-          scale: 100%;
+        /* Cuando la animación llegue al 75% */
+        75% {
+          /* Dejar de mostrar el cursor */
+          opacity: 0;
         }
       }
     </style>

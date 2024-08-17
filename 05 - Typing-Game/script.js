@@ -7,7 +7,7 @@ const $input = document.querySelector("input");
 const INITIAL_TIME = 30;
 
 // Texto inicial del juego
-const INITIAL_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam libero, posuere non dui vel, tincidunt lobortis nibh. Nunc auctor risus vitae leo facilisis, non aliquet risus porttitor. Vestibulum consectetur convallis quam, a gravida odio maximus et. Maecenas lectus erat, ultricies quis elementum sit amet, pharetra sit amet odio. Praesent lorem ante, lobortis eget velit vitae, sodales tincidunt purus. Vivamus posuere blandit elementum.'
+const INITIAL_TEXT = 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam libero, posuere non dui vel, tincidunt lobortis nibh. Nunc auctor risus vitae leo facilisis, non aliquet risus porttitor. Vestibulum consectetur convallis quam, a gravida odio maximus et. Maecenas lectus erat, ultricies quis elementum sit amet, pharetra sit amet odio. Praesent lorem ante, lobortis eget velit vitae, sodales tincidunt purus. Vivamus posuere blandit elementum.'
 
 let words = []
 // Guardar el tiempo actual del juego (por defecto es el tiempo inicial)
@@ -84,13 +84,136 @@ function initEvents () {
         $input.focus()
     })
 
-    // Llamar a la función "onKeyDown" que se encarga de controlar el comportamiento cuando 
-    // el usuario presiona una tecla
-    document.addEventListener('keydown', onKeyDown)
-    // Llamar a la función "onKeyUp" que se encarga de controlar el comportamiento cuando 
-    // el usuario deja de presionar una tecla
-    document.addEventListener('keyup', onKeyUp)
+    // Hacer que el input escuche el evento "keydown" y llame a la función "onKeyDown" cuando el usuario
+    // presione una tecla
+    $input.addEventListener('keydown', onKeyDown)
+    // Hacer que el input escuche el evento "keyup" y llame a la función "onKeyUp" cuando el usuario
+    // deje de presionar una tecla
+    $input.addEventListener('keyup', onKeyUp)
 
-    function onKeyDown () {}
-    function onKeyUp () {}
+    // Función que realiza una serie de acciones cuando el usuario presiona una tecla    
+    function onKeyDown (event) {
+        // Recuperar la palabra actual que está activa en el párrafo del DOM
+        const $currentWord = $paragraph.querySelector('n-word.active')
+        // Recuperar la letra actual que está activa en la palabra actual que está activa del párrafo del DOM
+        const $currentLetter = $currentWord.querySelector('n-letter.active')
+
+        const { key } = event
+        console.log(key)
+
+        if (key === ' ') {
+            // Evitar comportamiento por defecto cuando se presiona el espacio
+            // Evitar que se escriba el espacio en el input (si se quita, se mostrará el espacio en el input)
+            event.preventDefault()
+            // Recuperar la siguiente palabra del párrafo del DOM
+            // Buscar el elemento que es hermano de la palabra actual
+            const $nextWord = $currentWord.nextElementSibling
+            // Recuperar la primera letra de la siguiente palabra
+            // Obtener la primera letra de la siguiente palabra
+            const $nextLetter = $nextWord?.querySelector('n-letter')
+
+            // Eliminar la clase "active" tanto a la palabra como a la letra actual ya que 
+            // la que está activa ahora es la siguiente palabra y letra
+            // Además, eliminar a la palabra actual la clase "marked" ya
+            $currentWord.classList.remove('active')
+            $currentLetter.classList.remove('active')
+
+            // Añadir la clase "active" a la palabra siguiente
+            $nextWord.classList.add('active')
+            // Añadir la clase "active" a la letra siguiente
+            $nextLetter.classList.add('active')
+            // Vaciar el input cuando se pase a la siguiente palabra para
+            // que no se mantenga la anterior palabra ya que daría error
+            $input.value = ''
+            // Cuando alguna de las letras de la palabra actual no tengan la clase "correct" y
+            // además la longitud de la palabra sea mayor a 0, significa que faltan letras por escribir (ya que para que esté escrita competamente, 
+            // la longitud tiene que ser 0)
+            const missedLetters = $currentWord.querySelectorAll('n-letter:not(.correct)').length > 0
+            // Si faltan letras por escribir en la palabra actual, añadirles la clase "marked",
+            // sino faltan palabras por escribir, añadirle a la palabra actual la clase "correct" 
+            const classToAdd = missedLetters ? 'marked' : 'correct'
+            // Aplicar la clase correspondiente a la palabra actual dependiendo de la condición cumplida
+            $currentWord.classList.add(classToAdd)
+            return
+        }
+
+        // Si el usuario presiona la tecla de borrar
+        if (key === 'Backspace') {
+            // Recuperar la palabra anterior
+            // Acceder al elemento anterior que coincida con el elemento actual
+            // Buscar antes del elemento "word" del DOM si existe otro igual a él
+            const $previousWord = $currentWord.previousElementSibling
+            // Recuperar la letra anterior
+            // Acceder al elemento anterior que coincida con el elemento actual
+            // Buscar antes del elemento "letter" del DOM si existe otro igual a él
+            const $previousLetter = $currentLetter.previousElementSibling
+
+            if (!$previousWord && $previousLetter) {
+                event.preventDefault()
+                return
+            }
+        }
+
+    }
+    function onKeyUp () {
+        // Recuperar la palabra actual que está activa en el párrafo del DOM
+        const $currentWord = $paragraph.querySelector('n-word.active')
+        // Recuperar la letra actual que está activa en la palabra actual que está activa del párrafo del DOM
+        const $currentLetter = $currentWord.querySelector('n-letter.active')
+
+        // Recuperamos la palabra actual que tiene que escribir el usuario
+        const currentWord = $currentWord.innerText.trim()
+        // Limitar el número de letras que se puede escribir en el input
+        // El límite de letras que se puedan escribir será el número de letras que tenga la palabra actual
+        $input.maxLength = currentWord.length
+        console.log({ value: $input.value, currentWord })
+
+        // Obtener todas las letras de la palabra actual
+        // Recuperar cada uno de los elementos letter de la palabra actual
+        const $letters = $currentWord.querySelectorAll('n-letter')
+        // Eliminar las clases "correct" e "incorrect" de las letras cuando se vuelva a cargar la página
+        // Recorrer cada una de las letras de "$letters" y eliminarles la clase "correct" o "incorrect" dependiendo de cuál tenga
+        $letters.forEach($letter => $letter.classList.remove('correct', 'incorrect'))
+
+        // Obtener el valor actual del elemento input y convertirlo en un array (con el método split) 
+        // y recorrer cada uno de los elementos del mismo
+        $input.value.split('').forEach((elem, index) => {
+            // Recuperar la letra actual
+            // Obtener la letra actual accediendo al índice actual que se está recorriendo en el array "letters"
+            const $letter = $letters[index]
+            // Recuperar la letra actual que debemos de comprobar (comprobar que es igual a 
+            // la letra que se está recorriendo actualmente)
+            const letterToCheck = currentWord[index]
+            // Si la igualdad entre la letra que ha escrito el usuario y la letra actual 
+            // que se está recorriendo es correcta
+            const isCorrect = elem === letterToCheck
+
+            // Si la igualdad es correcta, añadirle a la letra la clase CSS "correct"
+            // Por el contrario, si la igualdad en incorrecta, es decir, no son iguales, añadirle a la letra actual la clase CSS "incorrect"
+            const classLetter = isCorrect ? 'correct' : 'incorrect'
+            // Añadirle a la letra la clase correspondiente
+            $letter.classList.add(classLetter)
+        })
+
+        // Quitarle la clase "active" a la letra que ya ha escrito el usuario
+        // para que el cursor pase a la siguiente
+        $currentLetter.classList.remove('active', 'last')
+        // Crear movimiento del cursor
+        // Obtener la longitud del input
+        const inputLength = $input.value.length
+        // Recuperar la siguiente letra del texto
+        const $nextLetter = $letters[inputLength]
+
+        // Si existe una siguiente letra
+        if ($nextLetter) {
+            // Añadirle a la siguiente letra la clase "active" para que se muestre 
+            // el cursor antes de esta
+            $nextLetter.classList.add('active')
+        // Si no existe una letra después
+        } else {
+            // Mostrar el cursor (clase "active") a la derecha de la letra actual (clase "last")
+            $currentLetter.classList.add('active', 'last')
+            // TODO: Mostrar "GAME OVER" cuando no haya siguiente letra
+        }
+    }
 }
