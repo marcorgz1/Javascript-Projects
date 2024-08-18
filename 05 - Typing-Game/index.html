@@ -31,9 +31,7 @@
       }
 
       #game {
-        display: flex;
-        flex-direction: column;        
-        max-width: 600px;        
+        max-width: 750px;        
       }
 
       time {
@@ -45,7 +43,7 @@
         top: 0;
         left: 0;
         pointer-events: none; /* Evitar que se pueda hacer click sobre el input */
-        /* opacity: 0; */
+        opacity: 0;
         z-index: -99;
       }
 
@@ -105,6 +103,10 @@
           opacity: 0;
         }
       }
+
+      #results {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -115,9 +117,11 @@
         <!-- Permitir que se haga focus en el elemento input nada más se cargue la página -->
         <input autofocus />
       </section>
-      <!-- <section id="results">
+      <section id="results">
         <h2>wpm</h2>
+        <h4></h4>
         <h2>accuracy</h2>
+        <h4></h4>
         <button id="reload-btn">
           <svg
             width="24"
@@ -136,9 +140,10 @@
             <path d="M20 4v5h-5" />
           </svg>
         </button>
-      </section> -->
+      </section>
     </main>
 
-    <script src="script.js"></script>
+    <!-- El "type='module'" nos permite importar módulos dentro de nuestro fichero JS -->
+    <script type="module" src="script.js"></script>
   </body>
 </html>

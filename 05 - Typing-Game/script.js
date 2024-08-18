@@ -1,14 +1,23 @@
+// Importar el array con las palabras ubicado en el fichero "data.js"
+import { words as INITIAL_WORDS } from './data.js'
+
 // Obtener los elementos del juego
 const $time = document.querySelector("time");
 const $paragraph = document.querySelector("p");
 const $input = document.querySelector("input");
+const $game = document.querySelector('#game')
+const $results = document.querySelector('#results')
+// Recuperar el primer elemento h4 (donde se guarda el wpm)
+const $wpm = document.querySelector('h4')
+// Recuperar el último elemento h4 (donde se guarda el accuracy)
+const $accuracy = document.querySelector('h4:last-child')
 
 // Constante que guarda el tiempo inicial del juego
 const INITIAL_TIME = 30;
 
 // Texto inicial del juego
-const INITIAL_TEXT = 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam libero, posuere non dui vel, tincidunt lobortis nibh. Nunc auctor risus vitae leo facilisis, non aliquet risus porttitor. Vestibulum consectetur convallis quam, a gravida odio maximus et. Maecenas lectus erat, ultricies quis elementum sit amet, pharetra sit amet odio. Praesent lorem ante, lobortis eget velit vitae, sodales tincidunt purus. Vivamus posuere blandit elementum.'
-
+// const INITIAL_TEXT = 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam libero, posuere non dui vel, tincidunt lobortis nibh. Nunc auctor risus vitae leo facilisis, non aliquet risus porttitor. Vestibulum consectetur convallis quam, a gravida odio maximus et. Maecenas lectus erat, ultricies quis elementum sit amet, pharetra sit amet odio. Praesent lorem ante, lobortis eget velit vitae, sodales tincidunt purus. Vivamus posuere blandit elementum.'
+// Array para almacenar las palabras generadas aleatoriamente desde el array del fichero "data.js"
 let words = []
 // Guardar el tiempo actual del juego (por defecto es el tiempo inicial)
 let currentTime = INITIAL_TIME
@@ -21,9 +30,10 @@ initEvents()
 
 // Función para manejar el juego
 function initGame () {
-    // Convertir la cadena de texto guardada en la variable "INITIAL_TEXT" en un array separando cada una de las palabras de esta cuando exista un espacio en blanco y guardar este nuevo array en la variable "words"
-    // Una vez la cadena de texto se ha convertido en un array, obtener solo las 32 primeras palabras
-    words = INITIAL_TEXT.split(' ').slice(0, 37)
+    // Ordenar las palabras del array "words" del fichero "data.js" aleatoriamente,
+    // quedarse solo con las 40 primeras palabras de ese array ordenado y guardarlas en 
+    // el array vacío de la variable "words"
+    words = INITIAL_WORDS.toSorted(() => Math.random() - 0.5).slice(0, 50)
     // Siempre que se inicie el juego, cargar el tiempo inicial
     currentTime = INITIAL_TIME
 
@@ -69,10 +79,6 @@ function initGame () {
         }
     // Decrementar el intervalo de tiempo cada 1000 milisegundos
     }, 1000)    
-}
-
-function gameOver () {
-    console.log('Game over')
 }
 
 // Función para manejar los eventos del juego
@@ -148,6 +154,14 @@ function initEvents () {
             // Buscar antes del elemento "letter" del DOM si existe otro igual a él
             const $previousLetter = $currentLetter.previousElementSibling
 
+            // Si existe una letra anterior y esta contiene la clase "correct"
+            if ($previousLetter && $previousLetter.classList.contains('correct')) {
+                // Evitar el comportamiento por defecto de la tecla de retroceso
+                event.preventDefault()
+                // Cuando la letra anterior tenga la clase "correct" evitar que se pueda retroceder cuando se presiona la tecla de retroceso
+                return
+            }
+
             if (!$previousWord && $previousLetter) {
                 event.preventDefault()
                 return
@@ -164,7 +178,7 @@ function initEvents () {
             // Si tenemos una palabra marcada y no tenemos una letra anterior
             if ($markedWord && !$previousLetter) {
                 // Evitar comportamiento por defecto cuando se presiona el espacio
-            // Evitar que se escriba el espacio en el input (si se quita, se mostrará el espacio en el input)
+                // Evitar que se escriba el espacio en el input (si se quita, se mostrará el espacio en el input)
                 event.preventDefault()
                 // Elimnarle a la palabra anterior la clase "marked" para que se elimine el subrayado ya que como hemos vuelto ya la palabra no está mal
                 $previousWord.classList.remove('marked')
@@ -188,14 +202,14 @@ function initEvents () {
                 // en un array
                 $input.value = [
                     // Recuperar todas la letras (tanto correctas como incorrectas) escritas por el usuario
-                    ...$previousWord.querySelectorAll('n-letter.correct', 'n-letter.incorrect')
+                    ...$previousWord.querySelectorAll('n-letter.correct, n-letter.incorrect')
                 // Recorrer cada uno de los elementos del array anterior
                 ].map($elem => { 
-                    // Verificar si el elemento del array que se está recorriendo tiene la clase "correct" o no
-                    // Si la tiene, el cursor volverá a esa letra
-                    // Si no la tiene, se elminará la clase "incorrect" de las letras que falten o estuvieran mal ya que como el usuario ha regresado 
-                    // a la última letra correcta, las de después de esta ya no están mal (volver a ponerle la clase "active")
-                    return $elem.classList.contains('correct') ? $elem.innerText : $elem.classList.add('active')
+                    // Verificar si el elemento del array que se está recorriendo tiene o no la clase "correct"
+                    // Si la tiene, posicionar el cursor depsués de la última letra correcta
+                    // Si no la tiene, eliminar todas las clases que tengan las letras 
+                    return $elem.classList.contains('correct') ? $elem.innerText : '*'
+                // Unir todos los elementos del array anterior en un único string
                 }).join('')
             }
         }
@@ -261,5 +275,18 @@ function initEvents () {
             $currentLetter.classList.add('active', 'last')
             // TODO: Mostrar "GAME OVER" cuando no haya siguiente letra
         }
+    }
+    // Función para mostrar las estadísticas de la partida cuando ésta termina
+    function gameOver () {
+        // Cuando termina el juego
+
+        // Dejar de mostrar las palabras para escribir
+        $game.style.display = 'none'
+        // Mostrar las resultados de la partida
+        $results.style.display = 'flex'
+
+        // Recuperar el número de palabras correctas que ha tenido el usuario durante la partida
+        // Recuperar el número de elementos "n-word" que tengan la clase "correct"
+        const correctWords = document.querySelectorAll('n-word.correct').length
     }
 }
