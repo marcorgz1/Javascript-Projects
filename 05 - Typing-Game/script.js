@@ -152,6 +152,52 @@ function initEvents () {
                 event.preventDefault()
                 return
             }
+
+            // Volver a la última letra escrita de la palabra anterior cuando el usuario haya presionado el espacio y quiera volver
+
+            // Permitir al cursor ir para atrás si existe una palabra marcada (ya que si está amarcada es porque está mal, 
+            // por lo que queremos solucionarla)
+            // Recuperar la palabra marcada
+            // Accedemos al primer elemento "n-word" del párrafo
+            const $markedWord = $paragraph.querySelector('n-word.marked')
+            
+            // Si tenemos una palabra marcada y no tenemos una letra anterior
+            if ($markedWord && !$previousLetter) {
+                // Evitar comportamiento por defecto cuando se presiona el espacio
+            // Evitar que se escriba el espacio en el input (si se quita, se mostrará el espacio en el input)
+                event.preventDefault()
+                // Elimnarle a la palabra anterior la clase "marked" para que se elimine el subrayado ya que como hemos vuelto ya la palabra no está mal
+                $previousWord.classList.remove('marked')
+                // Añadirle nuevamente a la palabra anterior la clase "active" para posicionar el cursor en la última letra escrita
+                $previousWord.classList.add('active')
+
+                // Recuperar la última letra escrita
+                // De la palabra anterior, obtener el último elemento (last-child) "n-letter" que haya
+                const $lastTypedLetter = $previousWord.querySelector('n-letter:last-child')
+
+                // Eliminar la clase "active" a la letra actual ya que como hemos vuelto a la última letra escrita, 
+                // la actual ya no es la que está activa
+                $currentLetter.classList.remove('active')
+                // Añadirle a la letra actual la clase "active" ya que es la que
+                // ahora está activa
+                $lastTypedLetter.classList.add('active')
+
+                // Limpiar el input cuando ya se haya vuelto a la última letra 
+                // escrita (para que no se mantenga lo anterior escrito y dé error)
+                // Las llaves se utilizan para transformar lo que devuelve el querySelectorAll (que es una "NodeList" lo que devuelve)
+                // en un array
+                $input.value = [
+                    // Recuperar todas la letras (tanto correctas como incorrectas) escritas por el usuario
+                    ...$previousWord.querySelectorAll('n-letter.correct', 'n-letter.incorrect')
+                // Recorrer cada uno de los elementos del array anterior
+                ].map($elem => { 
+                    // Verificar si el elemento del array que se está recorriendo tiene la clase "correct" o no
+                    // Si la tiene, el cursor volverá a esa letra
+                    // Si no la tiene, se elminará la clase "incorrect" de las letras que falten o estuvieran mal ya que como el usuario ha regresado 
+                    // a la última letra correcta, las de después de esta ya no están mal (volver a ponerle la clase "active")
+                    return $elem.classList.contains('correct') ? $elem.innerText : $elem.classList.add('active')
+                }).join('')
+            }
         }
 
     }
