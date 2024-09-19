@@ -7,14 +7,12 @@ const $paragraph = document.querySelector("p");
 const $input = document.querySelector("input");
 const $game = document.querySelector('#game')
 const $results = document.querySelector('#results')
-const $wpm = $results.querySelector('#wpm')
-const $accuracy = $results.querySelector('#accuracy')
 const $resultsWpm = $results.querySelector('#results-wpm')
 const $resultsAccuracy = $results.querySelector('#results-accuracy')
 const $reloadBtn = $results.querySelector('#reload-btn')
 
 // Constante que guarda el tiempo inicial del juego
-const INITIAL_TIME = 30;
+const INITIAL_TIME = 5;
 
 // Texto inicial del juego
 // const INITIAL_TEXT = 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam libero, posuere non dui vel, tincidunt lobortis nibh. Nunc auctor risus vitae leo facilisis, non aliquet risus porttitor. Vestibulum consectetur convallis quam, a gravida odio maximus et. Maecenas lectus erat, ultricies quis elementum sit amet, pharetra sit amet odio. Praesent lorem ante, lobortis eget velit vitae, sodales tincidunt purus. Vivamus posuere blandit elementum.'
@@ -36,7 +34,12 @@ function initGame() {
     // Ocultar nuevamente los resultados
     $results.style.display = 'none'
     // Vaciar el input ya que nada más cargar la página debe de estar vacío
+    // Vaciar el input ya que nada más cargar la página debe de estar vacío
     $input.value = ''
+
+    // Establecer "playing" como false ya que sólo empezará a ser "true" cuando el usuario
+    // haya presionado la primera tecla
+    playing = false
 
     // Ordenar las palabras del array "words" del fichero "data.js" aleatoriamente,
     // quedarse solo con las 40 primeras palabras de ese array ordenado y guardarlas en 
@@ -69,22 +72,7 @@ function initGame() {
     // Obtener la primera letra de la primera palabra del elemento p del DOM
     const $firstLetter = document.querySelector('n-letter')
     // Añadirle a la primera letra de la primera palabra del elemento p del DOM la clase CSS "active"
-    $firstLetter.classList.add('active')
-
-    const intervalId = setInterval(() => {
-        // Decrementar el tiempo actual
-        currentTime--
-        // Actualizar el elemento "time" del HTML cada vez que cambie el tiempo actual
-        $time.textContent = currentTime
-
-        // Si el la cuenta atrás llega a 0
-        if (currentTime === 0) {
-            // Limpiar el intervalo de tiempo para que no empiece a decrementar con números negativos
-            clearInterval(intervalId)            
-            gameOver()
-        }
-    // Decrementar el intervalo de tiempo cada 1000 milisegundos
-    }, 1000)
+    $firstLetter.classList.add('active')    
 }
 
 // Función para manejar los eventos del juego
@@ -94,8 +82,24 @@ function initEvents() {
         // Llamar al método "focus" para que se pueda escribir en el elemento input nada 
         // más se cargue la página
         $input.focus()
-    })
+        
+        const intervalId = setInterval(() => {
+            // Decrementar el tiempo actual
+            currentTime--
+            // Actualizar el elemento "time" del HTML cada vez que cambie el tiempo actual
+            $time.textContent = currentTime
     
+            // Si el la cuenta atrás llega a 0
+            if (currentTime === 0) {
+                // Limpiar el intervalo de tiempo para que no empiece a decrementar con números negativos
+                clearInterval(intervalId)            
+                gameOver()
+            }
+        // Decrementar el intervalo de tiempo cada 1000 milisegundos
+        }, 1000)
+        
+    })
+
     // Hacer que el input escuche el evento "keydown" y llame a la función "onKeyDown" cuando el usuario
     // presione una tecla
     $input.addEventListener('keydown', onKeyDown)
@@ -125,12 +129,12 @@ function onKeyDown(event) {
         const $nextWord = $currentWord.nextElementSibling
         // Recuperar la primera letra de la siguiente palabra
         // Obtener la primera letra de la siguiente palabra
-        const $nextLetter = $nextWord?.querySelector('n-letter')
+        const $nextLetter = $nextWord.querySelector('n-letter')
 
         // Eliminar la clase "active" tanto a la palabra como a la letra actual ya que 
         // la que está activa ahora es la siguiente palabra y letra
         // Además, eliminar a la palabra actual la clase "marked" ya
-        $currentWord.classList.remove('active')
+        $currentWord.classList.remove('active', 'marked')
         $currentLetter.classList.remove('active')
 
         // Añadir la clase "active" a la palabra siguiente
@@ -171,14 +175,19 @@ function onKeyDown(event) {
             return
         }
 
+        // Verificar si no existe una palabra anterior, pero sí una letra
         if (!$previousWord && $previousLetter) {
+            // Evitar comportamiento por defecto de la tecla de retorceso para poder
+            // manejar su comportamiento como queramos
             event.preventDefault()
+            // Evitar que se pueda retroceder al pulsar la tecla de retroceso para evitar
+            // que el usuario pueda borrar más allá del comienzo
             return
         }
 
         // Volver a la última letra escrita de la palabra anterior cuando el usuario haya presionado el espacio y quiera volver
 
-        // Permitir al cursor ir para atrás si existe una palabra marcada (ya que si está amarcada es porque está mal, 
+        // Permitir al cursor ir para atrás si existe una palabra marcada (ya que si está marcada es porque está mal, 
         // por lo que queremos solucionarla)
         // Recuperar la palabra marcada
         // Accedemos al primer elemento "n-word" del párrafo
@@ -230,7 +239,9 @@ function onKeyUp () {
     // Recuperar la letra actual que está activa en la palabra actual que está activa del párrafo del DOM
     const $currentLetter = $currentWord.querySelector('n-letter.active')
 
-    // Recuperamos la palabra actual que tiene que escribir el usuario
+    // Recuperar el contenido del elemento "$currentWord" del DOM que hace referencia a
+    // la palabra actual que el usuario debe de escribir y alamacenarla como una cadena
+    // de texto
     const currentWord = $currentWord.innerText.trim()
     // Limitar el número de letras que se puede escribir en el input
     // El límite de letras que se puedan escribir será el número de letras que tenga la palabra actual
@@ -264,7 +275,7 @@ function onKeyUp () {
         $letter.classList.add(classLetter)
     })
 
-    // Quitarle la clase "active" a la letra que ya ha escrito el usuario
+    // Quitarle las clases "active" y "last" a la letra que ya ha escrito el usuario
     // para que el cursor pase a la siguiente
     $currentLetter.classList.remove('active', 'last')
     // Crear movimiento del cursor
@@ -282,7 +293,6 @@ function onKeyUp () {
     } else {
         // Mostrar el cursor (clase "active") a la derecha de la letra actual (clase "last")
         $currentLetter.classList.add('active', 'last')
-        // TODO: Mostrar "GAME OVER" cuando no haya siguiente letra
     }
 }
 
