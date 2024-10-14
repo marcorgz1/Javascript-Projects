@@ -39,7 +39,7 @@ function initGame() {
     $input.value = ''
 
     // Ordenar las palabras del array "words" del fichero "data.js" aleatoriamente,
-    // quedarse solo con las 40 primeras palabras de ese array ordenado y guardarlas en 
+    // quedarse solo con las 50 primeras palabras de ese array ordenado y guardarlas en 
     // el array vacío de la variable "words"
     words = INITIAL_WORDS.toSorted(() => Math.random() - 0.5).slice(0, 50)
     // Siempre que se inicie el juego, cargar el tiempo inicial
@@ -47,7 +47,8 @@ function initGame() {
 
     // Mostrar en el DOM el tiempo actual del juego
     $time.textContent = currentTime
-    // Mapear cada una de las palabras del array que hemos creado anteriormente
+    // Mapear cada una de las palabras del array que hemos creado anteriormente y mostrarlas en
+    // el elemeto p del DOM
     $paragraph.innerHTML = words.map((word, index) => {
         // Dividir cada una de las palabras del array para crear un nuevo array en el 
         // que cada elemento de este sea una de las letras de la palabra
@@ -125,6 +126,8 @@ function onKeyDown(event) {
         const $nextWord = $currentWord.nextElementSibling
         // Recuperar la primera letra de la siguiente palabra
         // Obtener la primera letra de la siguiente palabra
+        // La "?" evita que aparezca un error si elelemento que se está intentando recuperar es
+        // null o undefined, en su lugar, muestra undefined
         const $nextLetter = $nextWord?.querySelector('n-letter')
 
         // Eliminar la clase "active" tanto a la palabra como a la letra actual ya que 
@@ -141,8 +144,8 @@ function onKeyDown(event) {
         // que no se mantenga la anterior palabra ya que daría error
         $input.value = ''
         // Cuando alguna de las letras de la palabra actual no tengan la clase "correct" y
-        // además la longitud de la palabra sea mayor a 0, significa que faltan letras por escribir (ya que para que esté escrita competamente, 
-        // la longitud tiene que ser 0)
+        // además la longitud de la palabra sea mayor a 0, significa que faltan letras por escribir (ya que para que esté escrita completamente
+        // la palabra, la longitud tiene que ser 0)
         const missedLetters = $currentWord.querySelectorAll('n-letter:not(.correct)').length > 0
         // Si faltan letras por escribir en la palabra actual, añadirles la clase "marked",
         // sino faltan palabras por escribir, añadirle a la palabra actual la clase "correct" 

@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body { 
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    height: 100vh;
+    background: #222;
+    font-family: 'Onest';
+}
+
+main {
+    background: #f0f0f0;
+    padding: 16px;
+    border-radius: 14px; 
+    width: 600px; 
+    
+    & h1 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 500;
+    }
+
+    & .content {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 25px;
+
+        & .type-input {
+            z-index: 99;
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .word {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            & input {
+                height: 51px;
+                width: 50px;
+                margin: 4px;
+                color: #0d47a1;
+                border: 2px solid #b5b5b5;
+                background: transparent;
+                text-align: center;
+                text-transform: uppercase; /* Da igual que la letra se escriba en minúscula o en mayúscula, siempre se pondrá mayúscula */
+                pointer-events: none;
+                font-size: 22px;
+                font-weight: 500;
+            }
+
+            & input:first-child {
+                margin-left: 0;
+            }
+        }
+
+        & .info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+
+            & p {
+                font-size: 16px;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;    
+}
+
+#reset-game-btn, #show-hint-btn {
+    background: #09f;
+    padding: 14px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+        background: #004d65;
+        transition: background .3s ease;
+    }
+}
+
+.content .buttons #reset-game-btn .content #show-hint-btn {
+    cursor: pointer;
+    outline: none;
+    padding: 10px 0;
+    font-size: 17px;
+    border-radius: 5px;
+    transition: all .3s ease;
+}

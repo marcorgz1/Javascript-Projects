@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/word_game_icon.png" type="image/x-icon">
+    <title>Guess Word Game</title>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <main>
+        <h1>Guess Word Game</h1>
+        <article class="content">
+            <input class="type-input" maxlength="1">
+            <div class="word"></div>
+            <div class="info">
+                <p class="guess">Guesses: <span></span></p>
+                <p class="wrong">Mistakes: <span></span></p>
+                <p class="hint">Hints: <span></span></p>
+            </div>
+
+            <div class="buttons">
+                <button id="reset-game-btn">Reset Game</button>
+                <button id="show-hint-btn">Show Hint</button>
+            </div>
+        </article>
+    </main>
+
+    <script src="wordsList.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
