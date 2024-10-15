@@ -46,7 +46,7 @@ main {
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
-
+            
             & input {
                 height: 51px;
                 width: 50px;
@@ -58,7 +58,7 @@ main {
                 text-transform: uppercase; /* Da igual que la letra se escriba en minúscula o en mayúscula, siempre se pondrá mayúscula */
                 pointer-events: none;
                 font-size: 22px;
-                font-weight: 500;
+                font-weight: bold;
             }
 
             & input:first-child {
@@ -110,4 +110,10 @@ main {
     font-size: 17px;
     border-radius: 5px;
     transition: all .3s ease;
+}
+
+#win-message {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 20px;
 }

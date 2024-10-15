@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Onest';
+    background: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%);
+    background-repeat: no-repeat;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: #f0f0f0;
+    width: 400px;
+    border-radius: 8px;
+
+    & h1 {
+        margin: 12px 0 12px 0;
+    }
+
+    & .add-task {
+        display: flex;
+        width: 90%;
+        gap: 16px;
+        border: 1px solid #aaa;
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 16px;
+
+        & input {
+            border: 0;
+            background: none;
+        }
+    }
+}
+
+.todo-sections {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+
+    & .filters {
+        display: flex;
+        gap: 16px;
+    }
+
+    & button {
+        background: #34404e;
+        padding: 12px;
+        color: #fff;
+        border-radius: 8px;
+    }
+}

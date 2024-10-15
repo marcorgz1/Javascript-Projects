@@ -10,6 +10,7 @@ const $guesses = $('.guess span')
 const $mistakes = $('.wrong span')
 const $resetBtn = $('#reset-game-btn')
 const $showHintBtn = $('#show-hint-btn')
+const $winMessage = $('#win-message')
 
 // Variables
 // Almacenar la palabra a adivinar
@@ -26,7 +27,7 @@ let maxGuesses
 function startGame () {
     alert('Ha empezado un nuevo juego! Adivina la siguiente palabra: ')
     
-    $hint.style.display = 'none'
+    $hintText.style.display = 'none'
 
     // Elegir palabra aleatoria de la lista de palabras
     // Obtener un número entre el 0 (incluido) y el 1 (excluido) (Math.random()) y dicho número
@@ -51,7 +52,7 @@ function startGame () {
     $guesses.innerText = maxGuesses
     $mistakes.innerText = incorrectLetters
 
-
+    $wordToGuess.innerHTML = ''
     // Crear un elemento input en el DOM para cada una de las letras de la palabra
     for (let i = 0; i < chosenWord.length; i++) {
         const letterInput = document.createElement('input')
@@ -85,14 +86,14 @@ function handleInput (event) {
 
             // Añadir la letra actual al array "correctLetters" ya que dicha letra estaba
             // en la palabra
-            correctLetters.push(key)
+            correctLetters += key
         // Por otro lado, si la letra actual no está en la palabra a adivinar
         } else {
             // Decrementar el contador de intentos
             maxGuesses--
             // Agregar la letra actual que no está en la palabra que hay que adivinar al
             // array "incorrectLetters"
-            incorrectLetters.push(key)
+            incorrectLetters.push(`${key}`)
             // Escribir en el elemento span del párrafo con clase "wrong" del DOM la 
             // letra incorrecta
             $mistakes.innerText = incorrectLetters
@@ -104,22 +105,19 @@ function handleInput (event) {
     // Si la longitud del array que contiene las letras correctas y la longitud de la palabra
     // a adivinar coinciden, significa que el usuario ha adivinado la palabra
     if (correctLetters.length === chosenWord.length) {
-        // Crear nuevo párrafo con el texto de ganador de la partida
-        const $paragraph = document.createElement('p')
-        $paragraph.innerHTML = `Felicidades!! Encontraste la palabra <strong>${chosenWord.upperCase()}</strong>`
-        // Agregar dicho elemento al cuerpo del DOM
-        document.body.appendChild($paragraph)
+        $winMessage.textContent = 'Felicidades!! Has adivinado la palabra'
         // LLamar a la función "startGame" para que se vuelva a iniciar el juego una vez el
         // usuario ha adivinado la palabra
-        startGame()
-    // Por otro lado, si el usuario se queda sin intentos
+        // startGame()
+        // Deshabilitar elemento input para que no se puedan escribir mas letras una vez el juego haya
+        // terminado 
+        $textInput.disabled = true
+        // Por otro lado, si el usuario se queda sin intentos
     } else if (maxGuesses < 1) {
-        // Crear nuevo párrafo con el texto de ganador de la partida
-        const $paragraph = document.createElement('p')
-        $paragraph.innerHTML = `Vaya!! Te quedaste sin intentos. La palabra era <strong>${chosenWord.upperCase()}</strong>`
-        // Agregar dicho elemento al cuerpo del DOM
-        document.body.appendChild($paragraph)
-
+        $winMessage.innerHTML = `Vaya!! No te quedan más intentos. La palabra era: <strong>${chosenWord.toUpperCase()}</strong>`
+        // Deshabilitar elemento input para que no se puedan escribir mas letras una vez el juego haya
+        // terminado   
+        $textInput.disabled = true
         // Rellenar cada elemento input con la letra correspondiente para mostrar la palabra que
         // había que adivinar
         for (let i = 0; i < chosenWord.length; i++) {
@@ -134,8 +132,8 @@ function handleInput (event) {
 
 // Función para mostrar la pista correspondiente al usuario
 function showHint () { 
-    $hint.style.display = 'block'
-    $hint.style.opacity = '1'
+    $hintText.style.display = 'inline'
+    $hintText.style.opacity = '1'
 }
 
 // LLamar a la función "startGame" cuando se haga click en el botón de reiniciar el juego
@@ -143,7 +141,7 @@ $resetBtn.addEventListener('click', startGame)
 // Mostrar pista correspondiente al usuario cuando se haga click en el botón de mostrar pista
 $showHintBtn.addEventListener('click', showHint)
 // LLamar a la función "handleSubmit" cuando el usuario haga click en el elemento input del DOM
-$textInput.addEventListener('click', handleInput)
+$textInput.addEventListener('input', handleInput)
 $wordToGuess.addEventListener('click', () => $textInput.focus())
 document.addEventListener('keydown', () => $textInput.focus())
 

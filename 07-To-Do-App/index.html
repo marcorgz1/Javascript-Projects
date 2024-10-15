@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do App</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>To Do App</h1>
+      <section class="add-task">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M4 6l16 0" />
+          <path d="M4 12l16 0" />
+          <path d="M4 18l16 0" />
+        </svg>
+        <input placeholder="Type your new task" />
+      </section>
+      <section class="todo-sections">
+        <div class="filters">
+            <span>All</span>
+            <span>Pending</span>
+            <span>Completed</span>
+        </div>
+        <button>Clear All</button>
+      </section>
+      <hr />
+      <section class="tasks">
+        <ul class="task-box"></ul>
+      </section>
+    </main>
+  </body>
+</html>
