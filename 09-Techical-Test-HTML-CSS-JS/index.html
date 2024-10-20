@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Prueba Técnica Afor Clima</title>
+</head>
+
+<body class="flex flex-col justify-center items-center h-screen bg-[#222] text-white">
+  <div id="app">
+    <h1 class="text-4xl font-bold mb-8">Prueba Técnica Afor Clima 🌤️</h1>
+    <form class="flex justify-center items-center gap-8 mb-6">
+      <input type="text" id="location" class="text-black p-2 font-semibold" placeholder="Barcelona, Chile, etc" />
+      <button type="submit" class="bg-gray-600 p-2 rounded">Enviar</button>
+    </form>
+
+    <div class="flex flex-col justify-center items-center mt-16">
+      <h2 class="text-2xl font-bold mb-4">Resultados</h2>
+      <p id='temp' class="mb-2"><span class="font-semibold">Temperatura:</span> 0°C</p>
+      <p id='humidity'><span class="font-semibold">Humedad:</span> 0%</p>
+    </div>
+    <p id='error' style='color:red'></p>
+  </div>
+  <script type="module" src="/script.js"></script>
+</body>
+</html>
